@@ -23,3 +23,7 @@ body {
   background-color: black;
   transition: background 1s ease;
 }
+
+*::selection {
+  background-color: #00ff8c;
+}
