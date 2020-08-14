@@ -1,65 +1,96 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { useState, useRef, useEffect } from "react";
+import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 
-export default function Home() {
+const Wrapper = styled.section`
+  margin: auto;
+`
+
+const Input = styled.input`
+  border: none;
+  font-size: 1.6rem;
+  border-bottom: 0.05rem solid #dadada;
+`;
+
+const Note = styled.p`
+  text-align: center;
+  margin-top: auto;
+`;
+
+const Submit = styled.input`
+  border: none;
+  padding: 0.5rem;
+  background: black;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  align-self: flex-end;
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+export default function Search() {
+  const router = useRouter();
+
+  const [artist, setArtist] = useState("");
+  const [song, setSong] = useState("");
+  const artistInputRef = useRef();
+
+  useEffect(() => {
+    artistInputRef.current?.focus();
+  }, [])
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <>
+      <Wrapper>
+        <h1>Get yo lyrics 🎶</h1>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+            router.push(`/lyrics?artist=${artist}&song=${song}`);
+          }}
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+          <p>
+            <label htmlFor="artist">Artist</label>
+            <br />
+            <Input
+              ref={artistInputRef}
+              placeholder="Frank Ocean"
+              type="text"
+              minLength="1"
+              required
+              name="artist"
+              value={artist}
+              onChange={(e) => setArtist(e.target.value)}
+            />
+          </p>
+          <p>
+            <label htmlFor="song">Song</label>
+            <br />
+            <Input
+              placeholder="White Ferrari"
+              type="text"
+              minLength="1"
+              required
+              name="song"
+              value={song}
+              onChange={(e) => setSong(e.target.value)}
+            />
+          </p>
+          <Submit type="submit" value="search" />
+        </form>
+        <br />
+        <br />
+        <br />
+      </Wrapper>
+      <Note>
+        <strong>Important!</strong> You have to type the names correctly or it
+        won't work 😿
+      </Note>
+    </>
+  );
 }
